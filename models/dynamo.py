@@ -1,5 +1,7 @@
 import boto3
 import time
+import hashlib
+import random
 
 class DynamoDB:
 
@@ -15,13 +17,13 @@ class DynamoDB:
                 TableName=self.TABLE,
                 KeySchema=[
                     {
-                        'AttributeName': 'time',
+                        'AttributeName': 'key',
                         'KeyType': 'HASH'
                     }
                 ],
                 AttributeDefinitions=[
                     {
-                        'AttributeName': 'time',
+                        'AttributeName': 'key',
                         'AttributeType': 'S'
                     }
 
@@ -49,7 +51,7 @@ class DynamoDB:
     def batch_put(self, data):
         with self.table.batch_writer() as batch:
             for item in data:
-                print item
+                item['key'] = hashlib.md5(item['time'] + str(random.random())).hexdigest()
                 batch.put_item(Item=item)
 
     def list(self):
