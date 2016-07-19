@@ -46,5 +46,10 @@ class DynamoDB:
             Item=data
         )
 
+    def batch_put(self, data):
+        with self.table.batch_writer() as batch:
+            for item in data:
+                batch.put_item(Item=item)
+
     def list(self):
         return self.table.scan()['Items']

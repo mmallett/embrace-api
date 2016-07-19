@@ -21,6 +21,15 @@ def post_data():
     db.put(request.json)
     return json.dumps({'created':True}), 201
 
+@app.route('/volley', methods=['POST'])
+def post_volley():
+    try:
+        db.batch_put(request.json)
+        return json.dumps({'created': True}), 201
+    except Exception as e:
+        print e
+        return json.dumps({'created': False}), 500
+
 
 if __name__ == "__main__":
   import click
